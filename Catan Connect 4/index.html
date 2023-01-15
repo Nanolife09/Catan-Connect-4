@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Catan Connect 4</title>
+		<link rel = "stylesheet" href = "style.css">
+		<script type="text/javascript" src = "config.js" defer></script>
+		<script type="text/javascript" src = "script.js" defer></script>
+	</head>
+	<body>
+		<div id = "menu_container">
+			<div id = "menu">
+				<div id = "menu_title"><div class = "resource sheep"></div><h1>Catan Connect 4</h1><div class = "resource wheat"></div></div>
+				<div id = "menu_option">
+					<div class = "menu_button" onclick = "menu_selected('#how_to_play')"><div class = "resource wood"></div><h1>How To Play</h1></div>
+					<div class = "menu_button" onclick = "play()"><div class = "resource brick"></div><h1>Play</h1></div>
+					<div class = "menu_button" onclick = "menu_selected('#credit')"><div class = "resource ore"></div><h1>Credit</h1></div>
+				</div>
+			</div>
+			<div id = "how_to_play">
+				<h1 class = "close" onclick = "main_menu(this)">X</h1>
+				<h1 id = "help_instruction">Click on the button to see more Information</h1>
+				<div id = "help_option_container">
+					<div class = "help_option" onclick = "help('#help1')"><div class = "resource wood"></div><h1>Game Screen</h1></div>
+					<div class = "help_option" onclick = "help('#help2')"><div class = "resource brick"></div><h1>Game Objective</h1></div>
+					<div class = "help_option" onclick = "help('#help3')"><div class = "resource sheep"></div><h1>How to play</h1></div>
+					<div class = "help_option" onclick = "help('#help4')"><div class = "resource wheat"></div><h1>Extra help</h1></div>
+				</div>
+				<div class = "help_screen" id = "help1">
+					<h1 class = "close" onclick = "return_menu(this)">X</h1>
+					<div class = "help_title"><div class = "resource sheep"></div><h1>Game Screen</h1><div class = "resource wheat"></div></div>
+					<div class = "description">
+						<div class = "info"><div class = "resource brick"></div><h1><span style = "color: red" onmouseover = "show_img()" onmouseout = "hide_img()">This</span> Is What You Will See When The Game Starts.</h1></div>
+						<div class = "info"><div class = "resource ore"></div><h1>Both Sides Of The Screen Shows Resources And Development Card That Each Player Have.<br>You Can Use Your Development Card By Clicking The Development Card In Your Inventory.</h1></div>
+						<div class = "info"><div class = "resource wood"></div><h1>The Center Of The Screen Is The Board.<br>Board Will Be Different For Each Game<br>When You Select A Column Of The Board, The Mark Will Fill The Board From Bottom To Top</h1></div>
+					</div>
+					<img id = "sample" src = "sample.png">
+				</div>
+				<div class = "help_screen" id = "help2">
+					<h1 class = "close" onclick = "return_menu(this)">X</h1>
+					<div class = "help_title"><div class = "resource sheep"></div><h1>Game Objective</h1><div class = "resource wheat"></div></div>
+					<div class = "description">
+						<div class = "info"><div class = "resource brick"></div><h1>You Can Win By Connecting 4 Marks Vertically, Horizontally, Or Diagnally</h1></div>
+						<div class = "info"><div class = "resource ore"></div><h1>You Can Also Win By Buying 10 Victory Points</h1></div>
+						<div class = "info"><div class = "resource wood"></div><h1>When The Board Is Completely Filled With Marks, The Player With Most Victory Points Wins</h1></div>
+					</div>
+				</div>
+				<div class = "help_screen" id = "help3">
+					<h1 class = "close" onclick = "return_menu(this)">X</h1>
+					<div class = "help_title"><div class = "resource sheep"></div><h1>How to play</h1><div class = "resource wheat"></div></div>
+					<div class = "description">
+						<div class = "info"><div class = "resource brick"></div><h1>You Can Buy 2 Development Card<br> OR <br>Use 1 Development Card</h1></div>
+						<div class = "info"><div class = "resource ore"></div><h1>You Can Trade 2 Identical Resources To 1 Any Resource Maximum of 3 Times Per Turn</h1></div>
+						<div class = "info"><div class = "resource wood"></div><h1>Place Your Mark At The End Of Your Turn To Obtain One Resource Where Your Mark Lands</h1></div>
+					</div>
+				</div>
+				<div class = "help_screen" id = "help4">
+					<h1 class = "close" onclick = "return_menu(this)">X</h1>
+					<div class = "help_title"><div class = "resource sheep"></div><h1>Extra help</h1><div class = "resource wheat"></div></div>
+					<div class = "description">
+						<div class = "info"><div class = "resource brick"></div><h1>You Can Cancel The Use Of Development Card By Clicking The Icon In Your Inventory Or Closing The Pop-Up Screen By Clicking On 'X'</h1></div>
+						<div class = "info"><div class = "resource ore"></div><h1>You Can Check What Individual Development Card Does By Clicking '?' In The <br>- Buy Development Card -</h1></div>
+						<div class = "info"><div class = "resource wood"></div><h1>Cyan Goes First<br>Pink Will Earn Two Resources On Its First Turn</h1></div>
+					</div>
+				</div>
+			</div>
+			<div id = "credit">
+				<h1 class = "close" onclick = "main_menu(this)">X</h1>
+				<div class = "credit_element"><div class = "resource brick"></div><h1>Created by Nanolife09_</h1></div>
+				<div class = "credit_element"><div class = "resource sheep"></div><h1>Note: Have a nice day!</h1></div>
+			</div>
+		</div>
+		<div id = "game">
+			<h1 id = "instruction">Click Here To Drop Your Mark.</h1>
+			<canvas id = "board"></canvas>
+			<div id = "cyan" class = "table">
+				<h1>- Cyan -</h1>
+				<div class = "resource_list" data = "cyan">
+					<h1>Wood: 0</h1><div class = "resource wood"></div>
+					<h1>Brick: 0</h1><div class = "resource brick"></div>
+					<h1>Sheep: 0</h1><div class = "resource sheep"></div>
+					<h1>Ore: 0</h1><div class = "resource ore"></div>
+					<h1>Wheat: 0</h1><div class = "resource wheat"></div>
+				</div>
+				<div class = "abilities_list" data = "cyan">
+					<div class = "ability" data = "robber" onclick = "robber()">
+						<h1>Robber: </h1><div class = "item robber">0</div>
+					</div>
+					<div class = "ability" data = "knight" onclick = "use_knight()">
+						<h1>Knight: </h1><div class = "item knight">0</div>
+					</div>
+					<div class = "ability" data = "dummy" onclick = "create_dummy()">
+						<h1>Dummy: </h1><div class = "item dummy">0</div>
+					</div>
+					<div class = "ability" data = "year_plenty" onclick = "year_of_plenty()">
+						<h1>Year of Plenty: </h1><div class = "item year_plenty">0</div>
+					</div>
+					<div class = "ability" data = "monopoly" onclick = "use_monopoly(this)">
+						<h1>Monopoly: </h1><div class = "item monopoly">0</div>
+					</div>
+					<div class = "ability" data = "vp" onclick = "passive_announcement()">
+						<h1>Victory Point: </h1><div class = "item vp">0</div>
+					</div>
+					<div class = "ability" data = "city" onclick = "passive_announcement()">
+						<h1>City: </h1><div class = "item city">0</div>
+					</div>
+					<div class = "ability" data = "port" onclick = "passive_announcement()">
+						<h1>Port: </h1><div class = "item port">0</div>
+					</div>
+				</div>
+			</div>
+			<div id = "pink" class = "table">
+				<h1>- Pink -</h1>
+				<div class = "resource_list" data = "pink">
+					<h1>Wood: 0</h1><div class = "resource wood"></div>
+					<h1>Brick: 0</h1><div class = "resource brick"></div>
+					<h1>Sheep: 0</h1><div class = "resource sheep"></div>
+					<h1>Ore: 0</h1><div class = "resource ore"></div>
+					<h1>Wheat: 0</h1><div class = "resource wheat"></div>
+				</div>
+				<div class = "abilities_list" data = "pink">
+					<div class = "ability" data = "robber" onclick = "robber(this)">
+						<h1>Robber: </h1><div class = "item robber">0</div>
+					</div>
+					<div class = "ability" data = "knight" onclick = "use_knight()">
+						<h1>Knight: </h1><div class = "item knight">0</div>
+					</div>
+					<div class = "ability" data = "dummy" onclick = "create_dummy()">
+						<h1>Dummy: </h1><div class = "item dummy">0</div>
+					</div>
+					<div class = "ability" data = "year_plenty" onclick = "year_of_plenty(this)">
+						<h1>Year of Plenty: </h1><div class = "item year_plenty">0</div>
+					</div>
+					<div class = "ability" data = "monopoly" onclick = "use_monopoly(this)">
+						<h1>Monopoly: </h1><div class = "item monopoly">0</div>
+					</div>
+					<div class = "ability" data = "vp" onclick = "passive_announcement()">
+						<h1>Victory Point: </h1><div class = "item vp">0</div>
+					</div>
+					<div class = "ability" data = "city" onclick = "passive_announcement()">
+						<h1>City: </h1><div class = "item city">0</div>
+					</div>
+					<div class = "ability" data = "port" onclick = "passive_announcement()">
+						<h1>Port: </h1><div class = "item port">0</div>
+					</div>
+				</div>
+			</div>
+			<div id = "action">
+				<button onclick = "open_tab('#trade')" data = "trade">- Trade (0 / 3) -</button>
+				<h1 id = "turn">Cyan's turn</h1>
+				<button onclick = "open_tab('#shop')" data = "dev_card">- Buy Development Card (0 / 2) -</button>
+			</div>
+			<div id = "trade">
+				<h1 class = "close" onclick = "close_tab(this)">X</h1>
+				<div id = "trade_list">
+					<div id = "trade_to">
+						<h1>Offer...</h1>
+						<div class = "trading">
+							<h1>Wood: </h1><div class = "resource wood"><input type = "number" name = "wood" value = "0" onchange = "only_integer(this)"></div>
+							<h1>Brick: </h1><div class = "resource brick"><input type = "number" name = "brick" value = "0" onchange = "only_integer(this)"></div>
+							<h1>Sheep: </h1><div class = "resource sheep"><input type = "number" name = "sheep" value = "0" onchange = "only_integer(this)"></div>
+							<h1>Ore: </h1><div class = "resource ore"><input type = "number" name = "ore" value = "0" onchange = "only_integer(this)"></div>
+							<h1>Wheat: </h1><div class = "resource wheat"><input type = "number" name = "wheat" value = "0" onchange = "only_integer(this)"></div>
+						</div>
+					</div>
+					<div id = "trade_for">
+						<h1>For...</h1>
+						<div class = "trading">
+							<h1>Wood: </h1><div class = "resource wood"><input type = "number" name = "wood" value = "0" onchange = "only_integer(this)"></div>
+							<h1>Brick: </h1><div class = "resource brick"><input type = "number" name = "brick" value = "0" onchange = "only_integer(this)"></div>
+							<h1>Sheep: </h1><div class = "resource sheep"><input type = "number" name = "sheep" value = "0" onchange = "only_integer(this)"></div>
+							<h1>Ore: </h1><div class = "resource ore"><input type = "number" name = "ore" value = "0" onchange = "only_integer(this)"></div>
+							<h1>Wheat: </h1><div class = "resource wheat"><input type = "number" name = "wheat" value = "0" onchange = "only_integer(this)"></div>
+						</div>
+					</div>
+				</div>
+				<div class = "resource_list">
+					<div class = "cyan team_indicator" data = "free"></div>
+					<h1>Wood: 0</h1><div class = "resource wood"></div>
+					<h1>Brick: 0</h1><div class = "resource brick"></div>
+					<h1>Sheep: 0</h1><div class = "resource sheep"></div>
+					<h1>Ore: 0</h1><div class = "resource ore"></div>
+					<h1>Wheat: 0</h1><div class = "resource wheat"></div>
+				</div>
+				<button class = "confirm" onclick = "trade()">- Confirm -</button>
+			</div>
+			<div id = "shop">
+				<h1 class = "help" onclick = "open_shop_help()">?</h1>
+				<h1 class = "close" onclick = "close_tab(this)">X</h1>
+				<div class = "shop_list">
+					<div class = "shop_item shop_item_selected" data = "robber" onclick = "shop_item_selected(this)" onmouseover = "show_price(this)" onmouseleave= "hide_price()">
+						<h1>Robber: </h1><div class = "item robber"></div>
+					</div>
+					<div class = "shop_item" data = "knight" onclick = "shop_item_selected(this)" onmouseover = "show_price(this)" onmouseleave= "hide_price()">
+						<h1>Knight: </h1><div class = "item knight"></div>
+					</div>
+					<div class = "shop_item" data = "dummy" onclick = "shop_item_selected(this)" onmouseover = "show_price(this)" onmouseleave= "hide_price()">
+						<h1>Dummy: </h1><div class = "item dummy"></div>
+					</div>
+					<div class = "shop_item" data = "year_plenty" onclick = "shop_item_selected(this)" onmouseover = "show_price(this)" onmouseleave= "hide_price()">
+						<h1>Year of Plenty: </h1><div class = "item year_plenty"></div>
+					</div>
+					<div class = "shop_item" data = "monopoly" onclick = "shop_item_selected(this)" onmouseover = "show_price(this)" onmouseleave= "hide_price()">
+						<h1>Monopoly: </h1><div class = "item monopoly"></div>
+					</div>
+					<div class = "shop_item" data = "vp" onclick = "shop_item_selected(this)" onmouseover = "show_price(this)" onmouseleave= "hide_price()">
+						<h1>Victory Point: </h1><div class = "item vp"></div>
+					</div>
+					<div class = "shop_item" data = "city" onclick = "shop_item_selected(this)" onmouseover = "show_price(this)" onmouseleave= "hide_price()">
+						<h1>City: </h1><div class = "item city"></div>
+					</div>
+					<div class = "shop_item" data = "port" onclick = "shop_item_selected(this)" onmouseover = "show_price(this)" onmouseleave= "hide_price()">
+						<h1>Port: </h1><div class = "item port"></div>
+					</div>
+				</div>
+				<div class = "resource_list">
+					<div class = "cyan team_indicator" data = "free"></div>
+					<h1>Wood: 0</h1><div class = "resource wood"></div>
+					<h1>Brick: 0</h1><div class = "resource brick"></div>
+					<h1>Sheep: 0</h1><div class = "resource sheep"></div>
+					<h1>Ore: 0</h1><div class = "resource ore"></div>
+					<h1>Wheat: 0</h1><div class = "resource wheat"></div>
+				</div>
+				<button class = "confirm" onclick = "buy_ability()">- Buy -</button>
+			</div>
+			<div id = "cost">
+				<h1>Cost: </h1>
+				<div class = "resource wood">0</div>
+				<div class = "resource brick">0</div>
+				<div class = "resource sheep">0</div>
+				<div class = "resource ore">0</div>
+				<div class = "resource wheat">0</div>
+			</div>
+			<div id = "shop_help">
+				<h1 class = "close" onclick = "close_shop_help()">X</h1>
+				<h1>Select The Development Card For More Info</h1>
+				<div class = "shop_list">
+					<div class = "shop_item shop_help_selected" data = "robber" onclick = "ability_help_selected(this)">
+						<h1>Robber: </h1><div class = "item robber"></div>
+					</div>
+					<div class = "shop_item" data = "knight" onclick = "ability_help_selected(this)">
+						<h1>Knight: </h1><div class = "item knight"></div>
+					</div>
+					<div class = "shop_item" data = "dummy" onclick = "ability_help_selected(this)">
+						<h1>Dummy: </h1><div class = "item dummy"></div>
+					</div>
+					<div class = "shop_item" data = "year_plenty" onclick = "ability_help_selected(this)">
+						<h1>Year of Plenty: </h1><div class = "item year_plenty"></div>
+					</div>
+					<div class = "shop_item" data = "monopoly" onclick = "ability_help_selected(this)">
+						<h1>Monopoly: </h1><div class = "item monopoly"></div>
+					</div>
+					<div class = "shop_item" data = "vp" onclick = "ability_help_selected(this)">
+						<h1>Victory Point: </h1><div class = "item vp"></div>
+					</div>
+					<div class = "shop_item" data = "city" onclick = "ability_help_selected(this)">
+						<h1>City: </h1><div class = "item city"></div>
+					</div>
+					<div class = "shop_item" data = "port" onclick = "ability_help_selected(this)">
+						<h1>Port: </h1><div class = "item port"></div>
+					</div>
+				</div>
+				<button class = "confirm" onclick = "open_shop_info()">- Show Info -</button>
+			</div>
+			<div id = "shop_help_info">
+				<h1 class = "close" onclick = "close_shop_info()">X</h1>
+				<div id = "ability_selected">
+						<div class = "shop_items"><h1 class = "ability_type">Robber: </h1><div class = "item robber"></div></div>
+						<h1 class = "ability_info"></h1>
+				</div>
+			</div>
+			<div id = "Monopoly">
+				<h1 class = "close" onclick = "close_tab(this)">X</h1>
+				<h1>Choose The Resource To Place On The Tile</h1>
+				<div id = "Monopoly_list">
+					<div class = "display" data = "Wood" onclick = "monopoly_selected(this)"><h1>Wood: </h1><div class = "resource wood"></div></div>
+					<div class = "display" data = "Brick" onclick = "monopoly_selected(this)"><h1>Brick: </h1><div class = "resource brick"></div></div>
+					<div class = "display" data = "Sheep" onclick = "monopoly_selected(this)"><h1>Sheep: </h1><div class = "resource sheep"></div></div>
+					<div class = "display" data = "Ore" onclick = "monopoly_selected(this)"><h1>Ore: </h1><div class = "resource ore"></div></div>
+					<div class = "display" data = "Wheat" onclick = "monopoly_selected(this)"><h1>Wheat: </h1><div class = "resource wheat"></div></div>
+				</div>
+				<div class = "resource_list">
+					<div class = "cyan team_indicator" data = "free"></div>
+					<h1>Wood: 0</h1><div class = "resource wood"></div>
+					<h1>Brick: 0</h1><div class = "resource brick"></div>
+					<h1>Sheep: 0</h1><div class = "resource sheep"></div>
+					<h1>Ore: 0</h1><div class = "resource ore"></div>
+					<h1>Wheat: 0</h1><div class = "resource wheat"></div>
+				</div>
+			</div>
+			<div id = "year_of_plenty">
+				<h1 class = "close" onclick = "close_tab(this)">X</h1>
+				<h1 data = "year_of_plenty">Choose 5 resources to obtain...</h1>
+					<div id = "year_of_plenty_list">
+						<h1>Wood: </h1><div class = "resource wood"><input type = "number" name = "wood" value = "0" onchange = "only_integer(this)"></div>
+						<h1>Brick: </h1><div class = "resource brick"><input type = "number" name = "brick" value = "0" onchange = "only_integer(this)"></div>
+						<h1>Sheep: </h1><div class = "resource sheep"><input type = "number" name = "sheep" value = "0" onchange = "only_integer(this)"></div>
+						<h1>Ore: </h1><div class = "resource ore"><input type = "number" name = "ore" value = "0" onchange = "only_integer(this)"></div>
+						<h1>Wheat: </h1><div class = "resource wheat"><input type = "number" name = "wheat" value = "0" onchange = "only_integer(this)"></div>
+					</div>
+				<div class = "resource_list">
+					<div class = "cyan team_indicator" data = "free"></div>
+					<h1>Wood: 0</h1><div class = "resource wood"></div>
+					<h1>Brick: 0</h1><div class = "resource brick"></div>
+					<h1>Sheep: 0</h1><div class = "resource sheep"></div>
+					<h1>Ore: 0</h1><div class = "resource ore"></div>
+					<h1>Wheat: 0</h1><div class = "resource wheat"></div>
+				</div>
+				<button class = "confirm" onclick = "collect_year_of_plenty()">- Confirm -</button>
+			</div>
+			<div id = "win">
+				<h1>Cyan WIN!!!</h1>
+				<div id = "result">
+					<div class = "resource_list" data = "cyan">
+						<div class = "cyan team_indicator" data = "fixed"></div>
+						<h1>Wood: 0</h1><div class = "resource wood"></div>
+						<h1>Brick: 0</h1><div class = "resource brick"></div>
+						<h1>Sheep: 0</h1><div class = "resource sheep"></div>
+						<h1>Ore: 0</h1><div class = "resource ore"></div>
+						<h1>Wheat: 0</h1><div class = "resource wheat"></div>
+					</div>
+					<div class = "resource_list" data = "pink">
+						<div class = "pink team_indicator" data = "fixed"></div>
+						<h1>Wood: 0</h1><div class = "resource wood"></div>
+						<h1>Brick: 0</h1><div class = "resource brick"></div>
+						<h1>Sheep: 0</h1><div class = "resource sheep"></div>
+						<h1>Ore: 0</h1><div class = "resource ore"></div>
+						<h1>Wheat: 0</h1><div class = "resource wheat"></div>
+					</div>
+				</div>	
+				<div id = "option">
+					<button onclick  = "return_to_board()">- Review Board -</button>
+					<button onclick = "play_again()">- Play Again -</button>
+				</div>
+			</div>
+		</div>
+	</body>
+</html>
